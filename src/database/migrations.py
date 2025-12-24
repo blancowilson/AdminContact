@@ -56,26 +56,11 @@ def migrate_from_csv(session):
         column_mapping = {
             'First Name': 'first_name',
             'Last Name': 'last_name',
-            'Middle Name': 'middle_name',
             'E-mail 1 - Value': 'email_1',
             'E-mail 2 - Value': 'email_2',
-            'E-mail 3 - Value': 'email_3',
             'Phone 1 - Value': 'phone_1',
             'Phone 2 - Value': 'phone_2',
-            'Phone 3 - Value': 'phone_3',
-            'Phone 4 - Value': 'phone_4',
-            'Phone 5 - Value': 'phone_5',
             'Address 1 - Formatted': 'address',
-            'Address 1 - City': 'city',
-            'Address 1 - Region': 'state',
-            'Address 1 - Postal Code': 'zip_code',
-            'Address 1 - Country': 'country',
-            'Address 2 - Formatted': 'address_2',
-            'Address 2 - City': 'city_2',
-            'Address 2 - Region': 'state_2',
-            'Address 2 - Postal Code': 'zip_code_2',
-            'Address 2 - Country': 'country_2',
-            'Website 1 - Value': 'website',
             'Birthday': 'birth_date',
             'Notes': 'notes'
         }
@@ -112,11 +97,10 @@ def migrate_from_csv(session):
             
             # Eliminar claves que no pertenecen al modelo Contact
             valid_contact_fields = [
-                'first_name', 'last_name', 'middle_name', 'email_1', 'email_2', 'email_3',
-                'phone_1', 'phone_2', 'phone_3', 'phone_4', 'phone_5',
-                'address', 'city', 'state', 'zip_code', 'country',
-                'address_2', 'city_2', 'state_2', 'zip_code_2', 'country_2',
-                'website', 'birth_date', 'notes', 'relationship_general'
+                'first_name', 'last_name', 'email_1', 'email_2',
+                'phone_1', 'phone_2',
+                'address',
+                'birth_date', 'notes', 'relationship_general'
             ]
             
             contact_params = {}

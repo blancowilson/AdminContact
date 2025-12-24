@@ -3,9 +3,9 @@ name = "crm-personal"
 version = "0.1.0"
 description = "CRM Personal para gestión de contactos con relaciones, hobbies y eventos importantes"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
-    "flet>=0.28.0",
+    "flet[all]>=0.28.0",
     "sqlalchemy>=2.0.0",
     "pandas>=2.0.0",
     "icecream>=2.1.0",

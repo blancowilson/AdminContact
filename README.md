@@ -181,7 +181,12 @@ La aplicación requiere las siguientes bibliotecas de Python:
    pipx install uv
    ```
 
-2. Instalar las dependencias con uv:
+2. Crear un entorno virtual:
+   ```bash
+   uv venv
+   ```
+
+3. Instalar las dependencias con uv:
    ```bash
    uv pip install -r requirements.txt
    ```
@@ -190,8 +195,12 @@ La aplicación requiere las siguientes bibliotecas de Python:
    ```bash
    uv pip install flet sqlalchemy pandas icecream
    ```
+   **Nota:** para que `flet` funcione correctamente, es posible que necesites instalar dependencias adicionales con:
+   ```bash
+   uv pip install "flet[all]"
+   ```
 
-3. Ejecutar la aplicación:
+4. Ejecutar la aplicación:
    ```bash
    python main.py
    ```
@@ -208,7 +217,7 @@ La aplicación requiere las siguientes bibliotecas de Python:
    pip install uv
    ```
 
-2. Instalar el proyecto:
+2. Instalar el proyecto (asegúrate de que `requires-python` en `pyproject.toml` esté configurado en `>=3.9`):
    ```bash
    uv sync
    # o para instalar en modo editable:
