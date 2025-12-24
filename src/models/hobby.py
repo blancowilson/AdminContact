@@ -13,7 +13,7 @@ class Hobby(Base, BaseModel):
 class ContactHobby(Base, BaseModel):
     __tablename__ = 'contact_hobbies'
     
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact_id = Column(Integer, ForeignKey('contacts.rowid'), nullable=False)
     hobby_id = Column(Integer, ForeignKey('hobbies.id'), nullable=False)
 
     # Relaciones SQLAlchemy

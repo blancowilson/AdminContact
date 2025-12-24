@@ -13,8 +13,8 @@ class RelationshipType(Base, BaseModel):
 class ContactRelationship(Base, BaseModel):
     __tablename__ = 'contact_relationships'
     
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
-    related_contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact_id = Column(Integer, ForeignKey('contacts.rowid'), nullable=False)
+    related_contact_id = Column(Integer, ForeignKey('contacts.rowid'), nullable=False)
     relationship_type_id = Column(Integer, ForeignKey('relationship_types.id'), nullable=False)
 
     # Relaciones SQLAlchemy

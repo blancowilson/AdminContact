@@ -90,9 +90,9 @@ class MainScreen:
                 ft.Text(f"Teléfono: {contact.phone_1 or 'No disponible'}", expand=True),
                 ft.Text(f"Correo: {contact.email_1 or 'No disponible'}", expand=True),
                 ft.Text(f"Relación: {contact.relationship_general or 'No disponible'}", expand=True),
-                ft.IconButton(ft.Icons.VISIBILITY, on_click=lambda e, contact_id=contact.id: self.open_contact_detail(e, contact_id)),
-                ft.IconButton(ft.Icons.EDIT, on_click=lambda e, contact_id=contact.id: self.open_edit_contact(e, contact_id)),
-                ft.IconButton(ft.Icons.DELETE, on_click=lambda e, contact_id=contact.id: self.delete_contact(e, contact_id)),
+                ft.IconButton(ft.Icons.VISIBILITY, on_click=lambda e, contact_id=contact.rowid: self.open_contact_detail(e, contact_id)),
+                ft.IconButton(ft.Icons.EDIT, on_click=lambda e, contact_id=contact.rowid: self.open_edit_contact(e, contact_id)),
+                ft.IconButton(ft.Icons.DELETE, on_click=lambda e, contact_id=contact.rowid: self.delete_contact(e, contact_id)),
             ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN
             )

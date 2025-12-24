@@ -15,7 +15,7 @@ class TagType(Base, BaseModel):
 class ContactTag(Base, BaseModel):
     __tablename__ = 'contact_tags'
     
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact_id = Column(Integer, ForeignKey('contacts.rowid'), nullable=False)
     tag_type_id = Column(Integer, ForeignKey('tag_types.id'), nullable=False)
 
     # Relaciones SQLAlchemy

@@ -22,7 +22,7 @@ class ContactRepository:
     def get_by_id(contact_id):
         """Obtiene un contacto por ID"""
         with Session(engine) as session:
-            return session.query(Contact).filter(Contact.id == contact_id).first()
+            return session.query(Contact).filter(Contact.rowid == contact_id).first()
     
     @staticmethod
     def create(contact_data):
@@ -38,7 +38,7 @@ class ContactRepository:
     def update(contact_id, contact_data):
         """Actualiza un contacto existente"""
         with Session(engine) as session:
-            contact = session.query(Contact).filter(Contact.id == contact_id).first()
+            contact = session.query(Contact).filter(Contact.rowid == contact_id).first()
             if contact:
                 for key, value in contact_data.items():
                     setattr(contact, key, value)
@@ -51,7 +51,7 @@ class ContactRepository:
     def delete(contact_id):
         """Elimina un contacto"""
         with Session(engine) as session:
-            contact = session.query(Contact).filter(Contact.id == contact_id).first()
+            contact = session.query(Contact).filter(Contact.rowid == contact_id).first()
             if contact:
                 session.delete(contact)
                 session.commit()

@@ -8,7 +8,7 @@ from .base import Base, BaseModel
 class ImportantEvent(Base, BaseModel):
     __tablename__ = 'important_events'
     
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact_id = Column(Integer, ForeignKey('contacts.rowid'), nullable=False)
     title = Column(String, nullable=False)  # Ej: "Cumpleaños de Juan", "Aniversario de bodas"
     event_date = Column(String)  # Fecha del evento
     description = Column(Text)  # Descripción opcional del evento
