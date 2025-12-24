@@ -17,22 +17,26 @@ CRM Personal es una aplicación de gestión de contactos desarrollada en Python 
 ## Estructura del Proyecto
 
 ```
-CRMPersonal/
-├── main.py              # Punto de entrada principal de la aplicación
-├── ui.py                # Componentes de la interfaz de usuario
-├── event_handlers.py    # Manejadores de eventos para la lógica de la aplicación
-├── models.py            # Modelos de datos y lógica de negocio
-├── database.py          # Operaciones de base de datos
-├── contact.py           # Clase modelo para contactos
-├── validators.py        # Funciones de validación
-├── create_tables.py     # Script para crear las tablas de la base de datos
-├── utilitys.py          # Funciones de utilidad
-├── create_db.py         # Script para crear la base de datos (con error)
-├── main_view.py         # Vista alternativa de la aplicación
-├── temp.py              # Archivo temporal con funciones de ejemplo
-├── contacts.csv         # Archivo de datos de ejemplo
-├── contacts.db          # Base de datos SQLite
-└── README.md            # Documentación del proyecto
+AdminContact/
+├── .git/                 # Repositorio Git
+├── docs/                 # Documentación del proyecto
+├── scripts/              # Scripts de utilidad
+├── src/                  # Código fuente de la aplicación
+│   ├── config/           # Configuraciones
+│   ├── database/         # Módulos de base de datos (conexión, migraciones)
+│   ├── models/           # Definición de modelos de datos
+│   ├── services/         # Lógica de servicios (ej. manejadores de eventos, lógica de negocio)
+│   ├── ui/               # Componentes de la interfaz de usuario
+│   ├── utils/            # Funciones de utilidad
+│   ├── __init__.py       # Archivo de inicialización de paquete Python
+│   └── main.py           # Punto de entrada principal de la aplicación
+├── .gitignore            # Archivos y directorios ignorados por Git
+├── contacts.csv          # Archivo de datos de ejemplo
+├── pyproject.toml        # Configuración del proyecto y dependencias (PEP 621)
+├── README.md             # Documentación del proyecto
+├── requirements.txt      # Dependencias de Python
+├── run.py                # Script principal para iniciar la aplicación
+└── uv.lock               # Archivo de bloqueo de dependencias generado por uv (opcional)
 ```
 
 ## Descripción Detallada de los Scripts
