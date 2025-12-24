@@ -1,0 +1,185 @@
+"""
+Servicio de gestión de contactos para CRM Personal
+"""
+from ..database.repositories import ContactRepository, RelationshipRepository, TagRepository, HobbyRepository, EventRepository
+from ..config.logging_config import log_info, log_error, handle_error
+
+class ContactService:
+    """Servicio para operaciones de contactos"""
+    
+    @staticmethod
+    def get_all():
+        """Obtiene todos los contactos"""
+        try:
+            contacts = ContactRepository.get_all()
+            log_info(f"Obtenidos {len(contacts)} contactos")
+            return contacts
+        except Exception as e:
+            error_msg = handle_error(e, "obtener todos los contactos")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def get_by_id(contact_id):
+        """Obtiene un contacto por ID"""
+        try:
+            contact = ContactRepository.get_by_id(contact_id)
+            if contact:
+                log_info(f"Contacto encontrado: {contact.full_name}")
+            else:
+                log_info(f"Contacto con ID {contact_id} no encontrado")
+            return contact
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def create(contact_data):
+        """Crea un nuevo contacto"""
+        try:
+            contact = ContactRepository.create(contact_data)
+            log_info(f"Contacto creado: {contact.full_name}")
+            return contact
+        except Exception as e:
+            error_msg = handle_error(e, "crear contacto")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def update(contact_id, contact_data):
+        """Actualiza un contacto existente"""
+        try:
+            contact = ContactRepository.update(contact_id, contact_data)
+            if contact:
+                log_info(f"Contacto actualizado: {contact.full_name}")
+            else:
+                log_info(f"No se pudo actualizar contacto con ID {contact_id}")
+            return contact
+        except Exception as e:
+            error_msg = handle_error(e, f"actualizar contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def delete(contact_id):
+        """Elimina un contacto"""
+        try:
+            success = ContactRepository.delete(contact_id)
+            if success:
+                log_info(f"Contacto con ID {contact_id} eliminado")
+            else:
+                log_info(f"No se pudo eliminar contacto con ID {contact_id}")
+            return success
+        except Exception as e:
+            error_msg = handle_error(e, f"eliminar contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+
+class RelationshipService:
+    """Servicio para operaciones de relaciones"""
+    
+    @staticmethod
+    def get_all_types():
+        """Obtiene todos los tipos de relaciones"""
+        try:
+            types = RelationshipRepository.get_all_types()
+            log_info(f"Obtenidos {len(types)} tipos de relaciones")
+            return types
+        except Exception as e:
+            error_msg = handle_error(e, "obtener tipos de relaciones")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def get_by_contact_id(contact_id):
+        """Obtiene relaciones de un contacto"""
+        try:
+            relationships = RelationshipRepository.get_by_contact_id(contact_id)
+            log_info(f"Obtenidas {len(relationships)} relaciones para contacto ID {contact_id}")
+            return relationships
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener relaciones para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+
+class TagService:
+    """Servicio para operaciones de etiquetas"""
+    
+    @staticmethod
+    def get_all_types():
+        """Obtiene todos los tipos de etiquetas"""
+        try:
+            types = TagRepository.get_all_types()
+            log_info(f"Obtenidos {len(types)} tipos de etiquetas")
+            return types
+        except Exception as e:
+            error_msg = handle_error(e, "obtener tipos de etiquetas")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def get_by_contact_id(contact_id):
+        """Obtiene etiquetas de un contacto"""
+        try:
+            tags = TagRepository.get_by_contact_id(contact_id)
+            log_info(f"Obtenidas {len(tags)} etiquetas para contacto ID {contact_id}")
+            return tags
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener etiquetas para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+
+class HobbyService:
+    """Servicio para operaciones de hobbies"""
+    
+    @staticmethod
+    def get_all():
+        """Obtiene todos los hobbies"""
+        try:
+            hobbies = HobbyRepository.get_all()
+            log_info(f"Obtenidos {len(hobbies)} hobbies")
+            return hobbies
+        except Exception as e:
+            error_msg = handle_error(e, "obtener hobbies")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def get_by_contact_id(contact_id):
+        """Obtiene hobbies de un contacto"""
+        try:
+            hobbies = HobbyRepository.get_by_contact_id(contact_id)
+            log_info(f"Obtenidos {len(hobbies)} hobbies para contacto ID {contact_id}")
+            return hobbies
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener hobbies para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+
+class EventService:
+    """Servicio para operaciones de eventos"""
+    
+    @staticmethod
+    def get_by_contact_id(contact_id):
+        """Obtiene eventos de un contacto"""
+        try:
+            events = EventRepository.get_by_contact_id(contact_id)
+            log_info(f"Obtenidos {len(events)} eventos para contacto ID {contact_id}")
+            return events
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener eventos para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+    
+    @staticmethod
+    def get_all():
+        """Obtiene todos los eventos"""
+        try:
+            events = EventRepository.get_all()
+            log_info(f"Obtenidos {len(events)} eventos")
+            return events
+        except Exception as e:
+            error_msg = handle_error(e, "obtener todos los eventos")
+            log_error(error_msg)
+            raise
