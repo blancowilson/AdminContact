@@ -2,3 +2,4 @@ flet>=0.28.0
 sqlalchemy>=2.0.0
 pandas>=2.0.0
 icecream>=2.1.0
+requests>=2.31.0python-dotenv>=1.0.0
