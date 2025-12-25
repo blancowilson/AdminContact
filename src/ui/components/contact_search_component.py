@@ -214,13 +214,11 @@ class RelationshipManager:
         
         try:
             # Crear la relación
-            relationship_data = {
-                'contact_id': self.contact_id,
-                'related_contact_id': related_contact_id,
-                'relationship_type_id': int(relationship_type_id)
-            }
-            
-            new_relationship = self.relationship_service.create(relationship_data)
+            new_relationship = self.relationship_service.create(
+                contact_id=self.contact_id,
+                related_contact_id=related_contact_id,
+                relationship_type_id=int(relationship_type_id)
+            )
             
             if new_relationship:
                 # Limpiar selección

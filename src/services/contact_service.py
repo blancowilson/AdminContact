@@ -76,6 +76,10 @@ class ContactService:
             log_error(error_msg)
             raise
 
+from sqlalchemy.orm import Session
+from ..database.connection import engine
+from ..models.relationship import ContactRelationship, RelationshipType
+
 class RelationshipService:
     """Servicio para operaciones de relaciones"""
     
@@ -83,9 +87,8 @@ class RelationshipService:
     def get_all_types():
         """Obtiene todos los tipos de relaciones"""
         try:
-            types = RelationshipRepository.get_all_types()
-            log_info(f"Obtenidos {len(types)} tipos de relaciones")
-            return types
+            with Session(engine) as session:
+                return session.query(RelationshipType).all()
         except Exception as e:
             error_msg = handle_error(e, "obtener tipos de relaciones")
             log_error(error_msg)
@@ -95,11 +98,57 @@ class RelationshipService:
     def get_by_contact_id(contact_id):
         """Obtiene relaciones de un contacto"""
         try:
-            relationships = RelationshipRepository.get_by_contact_id(contact_id)
-            log_info(f"Obtenidas {len(relationships)} relaciones para contacto ID {contact_id}")
-            return relationships
+            with Session(engine) as session:
+                return session.query(ContactRelationship).filter(
+                    (ContactRelationship.contact_id == contact_id) |
+                    (ContactRelationship.related_contact_id == contact_id)
+                ).all()
         except Exception as e:
             error_msg = handle_error(e, f"obtener relaciones para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+
+    @staticmethod
+    def create(contact_id, related_contact_id=None, relationship_type_id=None):
+        """Crea una nueva relación entre contactos"""
+        # Manejar caso donde se pasa un diccionario como primer argumento
+        if isinstance(contact_id, dict):
+            data = contact_id
+            contact_id = data.get('contact_id')
+            related_contact_id = data.get('related_contact_id')
+            relationship_type_id = data.get('relationship_type_id')
+
+        try:
+            with Session(engine) as session:
+                relationship = ContactRelationship(
+                    contact_id=contact_id,
+                    related_contact_id=related_contact_id,
+                    relationship_type_id=relationship_type_id
+                )
+                session.add(relationship)
+                session.commit()
+                session.refresh(relationship)
+                return relationship
+        except Exception as e:
+            error_msg = handle_error(e, "crear relación")
+            log_error(error_msg)
+            raise
+
+    @staticmethod
+    def delete(relationship_id):
+        """Elimina una relación"""
+        try:
+            with Session(engine) as session:
+                relationship = session.query(ContactRelationship).filter(
+                    ContactRelationship.id == relationship_id
+                ).first()
+                if relationship:
+                    session.delete(relationship)
+                    session.commit()
+                    return True
+                return False
+        except Exception as e:
+            error_msg = handle_error(e, f"eliminar relación {relationship_id}")
             log_error(error_msg)
             raise
 
