@@ -18,6 +18,6 @@ class ContactRelationship(Base, BaseModel):
     relationship_type_id = Column(Integer, ForeignKey('relationship_types.id'), nullable=False)
 
     # Relaciones SQLAlchemy
-    contact = relationship("Contact", foreign_keys=[contact_id], back_populates="relationships_as_main")
+    contact = relationship("Contact", foreign_keys=[contact_id], back_populates="relationships")
     related_contact = relationship("Contact", foreign_keys=[related_contact_id], back_populates="relationships_as_related")
     relationship_type = relationship("RelationshipType")

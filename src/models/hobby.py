@@ -17,5 +17,5 @@ class ContactHobby(Base, BaseModel):
     hobby_id = Column(Integer, ForeignKey('hobbies.id'), nullable=False)
 
     # Relaciones SQLAlchemy
-    contact = relationship("Contact")
-    hobby = relationship("Hobby")
+    contact = relationship("Contact", overlaps="contacts,hobbies")
+    hobby = relationship("Hobby", overlaps="contacts,hobbies")

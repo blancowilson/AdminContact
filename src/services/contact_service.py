@@ -15,7 +15,53 @@ class ContactService:
             log_info(f"Obtenidos {len(contacts)} contactos")
             return contacts
         except Exception as e:
-            error_msg = handle_error(e, "obtener todos los contactos")
+            raise
+            
+    @staticmethod
+    def get_paginated(page=1, items_per_page=10, query=None):
+        """Obtiene una página de contactos, opcionalmente filtrados"""
+        try:
+            offset = (page - 1) * items_per_page
+            contacts = ContactRepository.get_paginated(offset=offset, limit=items_per_page, query=query)
+            log_info(f"Obtenida página {page} con {len(contacts)} contactos (Filtro: {query})")
+            return contacts
+        except Exception as e:
+            error_msg = handle_error(e, f"obtener contactos paginados página {page}")
+            log_error(error_msg)
+            raise
+            
+    @staticmethod
+    def search(query_term):
+        """Busca contactos por término"""
+        try:
+            contacts = ContactRepository.search(query_term)
+            log_info(f"Búsqueda '{query_term}': {len(contacts)} resultados")
+            return contacts
+        except Exception as e:
+            error_msg = handle_error(e, f"buscar contactos con término '{query_term}'")
+            log_error(error_msg)
+            raise
+
+    @staticmethod
+    def count_all(query=None):
+        """Cuenta el total de contactos, opcionalmente filtrados"""
+        try:
+            count = ContactRepository.count_all(query=query)
+            return count
+        except Exception as e:
+            error_msg = handle_error(e, f"contar contactos (Filtro: {query})")
+            log_error(error_msg)
+            raise
+
+    @staticmethod
+    def get_filtered(tag_ids=None, missing_phone=False, missing_email=False, status=None):
+        """Obtiene contactos filtrados para reportes"""
+        try:
+            contacts = ContactRepository.get_filtered(tag_ids, missing_phone, missing_email, status)
+            log_info(f"Reporte: {len(contacts)} resultados encontrados")
+            return contacts
+        except Exception as e:
+            error_msg = handle_error(e, "obtener contactos filtrados para reporte")
             log_error(error_msg)
             raise
     
@@ -96,13 +142,9 @@ class RelationshipService:
     
     @staticmethod
     def get_by_contact_id(contact_id):
-        """Obtiene relaciones de un contacto"""
+        """Obtiene relaciones de un contacto utilizando el repositorio con eager loading"""
         try:
-            with Session(engine) as session:
-                return session.query(ContactRelationship).filter(
-                    (ContactRelationship.contact_id == contact_id) |
-                    (ContactRelationship.related_contact_id == contact_id)
-                ).all()
+            return RelationshipRepository.get_by_contact_id(contact_id)
         except Exception as e:
             error_msg = handle_error(e, f"obtener relaciones para contacto ID {contact_id}")
             log_error(error_msg)
@@ -176,6 +218,18 @@ class TagService:
             return tags
         except Exception as e:
             error_msg = handle_error(e, f"obtener etiquetas para contacto ID {contact_id}")
+            log_error(error_msg)
+            raise
+            
+    @staticmethod
+    def bulk_add_tag(contact_ids, tag_type_id):
+        """Añade una misma etiqueta a múltiples contactos"""
+        try:
+            success = TagRepository.bulk_add_tag(contact_ids, tag_type_id)
+            log_info(f"Etiqueta {tag_type_id} añadida a {len(contact_ids)} contactos")
+            return success
+        except Exception as e:
+            error_msg = handle_error(e, "añadir etiqueta masiva")
             log_error(error_msg)
             raise
 

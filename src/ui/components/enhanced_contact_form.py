@@ -3,6 +3,7 @@ import time
 from src.config.logging_config import log_info, log_error
 from src.services.contact_service import ContactService
 from src.ui.components.contact_search_component import RelationshipManager
+from src.ui.components.tag_manager import TagManager
 
 class EnhancedContactForm:
     """Formulario mejorado para contactos con gestión de relaciones, hobbies e informes"""
@@ -14,6 +15,7 @@ class EnhancedContactForm:
         
         # Componentes
         self.relationship_manager = None
+        self.tag_manager = None
         
         # Crear campos de formulario
         self.txt_first_name = ft.TextField(label="Nombre*", width=300)
@@ -26,6 +28,27 @@ class EnhancedContactForm:
         self.txt_birth_date = ft.TextField(label="Fecha de Nacimiento (YYYY-MM-DD)", width=300)
         self.txt_relationship_general = ft.TextField(label="Relación General", width=300)
         self.txt_notes = ft.TextField(label="Notas", width=500, multiline=True)
+        
+        # Nuevos campos - Último contacto
+        self.txt_last_contact_date = ft.TextField(label="Fecha último contacto (YYYY-MM-DD)", width=300)
+        self.dd_last_contact_channel = ft.Dropdown(
+            label="Medio de contacto",
+            width=300,
+            options=[
+                ft.dropdown.Option("whatsapp", "WhatsApp"),
+                ft.dropdown.Option("telegram", "Telegram"),
+                ft.dropdown.Option("llamada", "Llamada telefónica"),
+                ft.dropdown.Option("email", "Email"),
+                ft.dropdown.Option("otro", "Otro"),
+            ]
+        )
+        
+        # Nuevos campos - Redes Sociales
+        self.txt_facebook = ft.TextField(label="Facebook", width=300, icon=ft.Icons.PERSON)
+        self.txt_instagram = ft.TextField(label="Instagram", width=300)
+        self.txt_linkedin = ft.TextField(label="LinkedIn", width=300)
+        self.txt_twitter = ft.TextField(label="Twitter/X", width=300)
+        self.txt_tiktok = ft.TextField(label="TikTok", width=300)
         
         # Cargar datos si estamos en modo edición
         if self.contact_id:
@@ -46,6 +69,15 @@ class EnhancedContactForm:
                 self.txt_birth_date.value = contact.birth_date
                 self.txt_relationship_general.value = contact.relationship_general
                 self.txt_notes.value = contact.notes
+                
+                # Cargar nuevos campos
+                self.txt_last_contact_date.value = contact.last_contact_date
+                self.dd_last_contact_channel.value = contact.last_contact_channel
+                self.txt_facebook.value = contact.facebook
+                self.txt_instagram.value = contact.instagram
+                self.txt_linkedin.value = contact.linkedin
+                self.txt_twitter.value = contact.twitter
+                self.txt_tiktok.value = contact.tiktok
         except Exception as e:
             log_error(f"Error cargando datos del contacto: {e}")
 
@@ -58,6 +90,11 @@ class EnhancedContactForm:
         if self.contact_id:
             self.relationship_manager = RelationshipManager(self.page, self.contact_id)
             relationship_content = self.relationship_manager.get_control()
+            
+            self.tag_manager = TagManager(self.page, self.contact_id)
+            tag_content = self.tag_manager.get_control()
+        else:
+            tag_content = ft.Text("Guarda el contacto primero para gestionar sus etiquetas.")
 
         # Crear pestañas para diferentes secciones
         tabs = ft.Tabs(
@@ -85,20 +122,31 @@ class EnhancedContactForm:
                         padding=10,
                     ),
                 ),
+                ft.Tab(
+                    text="Etiquetas",
+                    content=ft.Container(
+                        content=tag_content,
+                        padding=10,
+                    ),
+                ),
                 # Otros tabs se quedan como placeholders por ahora o se pueden añadir servicios reales
                 ft.Tab(
-                    text="Otros",
+                    text="Redes y Contacto",
                     content=ft.Container(
                         content=ft.Column([
-                            ft.Text("Otras configuraciones", size=16, weight=ft.FontWeight.BOLD),
+                            ft.Text("Último Contacto", size=16, weight=ft.FontWeight.BOLD),
+                            ft.Row([self.txt_last_contact_date, self.dd_last_contact_channel]),
                             ft.Divider(),
-                            ft.Text("Información adicional del contacto"),
-                        ]),
+                            ft.Text("Redes Sociales", size=16, weight=ft.FontWeight.BOLD),
+                            ft.Row([self.txt_facebook, self.txt_instagram]),
+                            ft.Row([self.txt_linkedin, self.txt_twitter]),
+                            self.txt_tiktok,
+                        ], scroll=ft.ScrollMode.AUTO, expand=True),
                         padding=10,
                     ),
                 ),
             ],
-            expand=True
+            expand=True,
         )
         
         # Botones
@@ -106,13 +154,18 @@ class EnhancedContactForm:
         btn_cancel = ft.TextButton("Cancelar", on_click=self.cancel_form, icon=ft.Icons.CANCEL)
         
         # Layout principal
-        form_layout = ft.Column([
-            ft.Text(f"{'Editar' if self.contact_id else 'Nuevo'} Contacto", size=20, weight=ft.FontWeight.BOLD),
-            ft.Divider(),
-            tabs,
-            ft.Divider(),
-            ft.Row([btn_save, btn_cancel], alignment=ft.MainAxisAlignment.END)
-        ], expand=True)
+        # Usamos un Container con padding para asegurar que los bordes no corten los botones
+        form_layout = ft.Container(
+            content=ft.Column([
+                ft.Text(f"{'Editar' if self.contact_id else 'Nuevo'} Contacto", size=20, weight=ft.FontWeight.BOLD),
+                ft.Divider(),
+                ft.Container(content=tabs, expand=True),  # Tabs toma el espacio disponible
+                ft.Divider(),
+                ft.Row([btn_save, btn_cancel], alignment=ft.MainAxisAlignment.END)
+            ], expand=True),
+            expand=True,
+            padding=20
+        )
         
         return form_layout
     
@@ -134,7 +187,14 @@ class EnhancedContactForm:
             "address": self.txt_address.value,
             "birth_date": self.txt_birth_date.value,
             "relationship_general": self.txt_relationship_general.value,
-            "notes": self.txt_notes.value
+            "notes": self.txt_notes.value,
+            "last_contact_date": self.txt_last_contact_date.value,
+            "last_contact_channel": self.dd_last_contact_channel.value,
+            "facebook": self.txt_facebook.value,
+            "instagram": self.txt_instagram.value,
+            "linkedin": self.txt_linkedin.value,
+            "twitter": self.txt_twitter.value,
+            "tiktok": self.txt_tiktok.value
         }
 
         try:
@@ -163,7 +223,4 @@ class EnhancedContactForm:
     
     def cancel_form(self, e):
         """Cancela el formulario y vuelve a la pantalla principal"""
-        from ..screens.main_screen import MainScreen
-        self.page.clean()
-        main_screen = MainScreen(self.page)
-        main_screen.show()
+        self.page.go("/")

@@ -85,3 +85,26 @@ class WahaService:
             error_msg = handle_error(e, "listar sesiones de WAHA")
             log_error(error_msg)
             raise
+
+    @classmethod
+    def check_number_status(cls, phone: str) -> dict:
+        """
+        Verifica si un número tiene cuenta de WhatsApp.
+        Retorna: {'numberExists': bool, 'canReceiveMessage': bool, ...}
+        """
+        url = f"{cls.BASE_URL}/api/{cls.SESSION}/contacts/check-exists"
+        payload = {"phone": phone}
+        
+        try:
+            log_info(f"Verificando estado de número {phone} vía WAHA")
+            response = requests.post(url, json=payload, headers=cls._get_headers())
+            response.raise_for_status()
+            result = response.json()
+            log_info(f"Estado de número {phone} verificado exitosamente: {result}")
+            return result
+        except Exception as e:
+            error_msg = handle_error(e, f"verificar estado de número {phone}")
+            log_error(error_msg)
+            raise
+            log_error(error_msg)
+            raise
