@@ -2,9 +2,13 @@
 Aplicación UI para CRM Personal
 """
 import flet as ft
-from ..config.logging_config import log_info, log_error
-from .screens.main_screen import MainScreen
-from .screens.contact_form_screen import ContactFormScreen
+from src.config.logging_config import log_info, log_error
+from src.ui.screens.main_screen import MainScreen
+from src.ui.screens.contact_form_screen import ContactFormScreen
+from src.ui.screens.contact_detail_screen import ContactDetailScreen
+from src.ui.screens.report_screen import ReportScreen
+from src.ui.screens.campaign_screen import CampaignScreen
+from src.ui.screens.bulk_tagging_screen import BulkTaggingScreen
 
 def main(page: ft.Page):
     """Función principal de la UI"""
@@ -30,8 +34,7 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View(
                     "/add-contact",
-                    [form_screen.show()],
-                    scroll=ft.ScrollMode.ADAPTIVE
+                    [form_screen.show()]
                 )
             )
         elif page.route.startswith("/edit-contact"):
@@ -43,13 +46,60 @@ def main(page: ft.Page):
                 page.views.append(
                     ft.View(
                         "/edit-contact",
-                        [form_screen.show()],
+                        [form_screen.show()]
+                    )
+                )
+        elif page.route.startswith("/contact-detail"):
+            # Detalle del contacto
+            contact_id = int(page.route.split("/")[-1]) if "/" in page.route else None
+            if contact_id:
+                detail_screen = ContactDetailScreen(page, contact_id=contact_id)
+                page.views.append(
+                    ft.View(
+                        f"/contact-detail/{contact_id}",
+                        [detail_screen.show()],
                         scroll=ft.ScrollMode.ADAPTIVE
                     )
                 )
-            else:
-                # Si no hay ID, redirigir a la página principal
-                page.go("/")
+        elif page.route == "/reports":
+            # Pantalla de reportes
+            report_screen = ReportScreen(page)
+            page.views.append(
+                ft.View(
+                    "/reports",
+                    [report_screen.show()],
+                    scroll=ft.ScrollMode.ADAPTIVE
+                )
+            )
+        elif page.route == "/campaigns":
+            # Pantalla de campañas
+            campaign_screen = CampaignScreen(page)
+            page.views.append(
+                ft.View(
+                    "/campaigns",
+                    [campaign_screen.show()]
+                )
+            )
+        elif page.route == "/bulk-tagging":
+            # Pantalla de etiquetado masivo
+            bulk_tag_screen = BulkTaggingScreen(page)
+            page.views.append(
+                ft.View(
+                    "/bulk-tagging",
+                    [bulk_tag_screen.show()]
+                )
+            )
+
+        # Fallback if no view was added
+        if not page.views:
+            main_screen = MainScreen(page)
+            page.views.append(
+                ft.View(
+                    "/",
+                    [main_screen.show()],
+                    scroll=ft.ScrollMode.ADAPTIVE
+                )
+            )
 
         page.update()
 
@@ -62,9 +112,8 @@ def main(page: ft.Page):
     page.on_view_pop = view_pop
     page.go(page.route)
 
-    # Mostrar la pantalla principal por defecto
-    main_screen = MainScreen(page)
-    main_screen.show()
+    # La navegación inicial se maneja con page.go(page.route) arriba
+    pass
 
 if __name__ == "__main__":
     # Para pruebas directas

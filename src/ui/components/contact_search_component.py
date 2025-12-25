@@ -2,7 +2,7 @@
 Componente de búsqueda de contactos para CRM Personal
 """
 import flet as ft
-from ...services.contact_service import ContactService
+from src.services.contact_service import ContactService, RelationshipService
 
 class ContactSearchField:
     """Componente para buscar y seleccionar contactos"""
@@ -178,9 +178,12 @@ class RelationshipManager:
             relationships = self.relationship_service.get_by_contact_id(self.contact_id)
             self.current_relationships.controls = []
             
+            # Asegurar que contact_id es int para la comparación
+            current_id = int(self.contact_id) if self.contact_id else None
+            
             for rel in relationships:
                 # Determinar cuál contacto es el relacionado (no el actual)
-                related_contact = rel.related_contact if rel.contact_id == self.contact_id else rel.contact
+                related_contact = rel.related_contact if rel.contact_id == current_id else rel.contact
                 rel_type = rel.relationship_type
                 
                 # Crear fila para mostrar la relación
@@ -193,9 +196,13 @@ class RelationshipManager:
                     )
                 ])
                 self.current_relationships.controls.append(rel_row)
+            
+            # Forzar actualización si el componente ya está en la página
+            if self.page:
+                self.page.update()
                 
         except Exception as ex:
-            print(f"Error cargando relaciones actuales: {ex}")
+            log_error(f"Error cargando relaciones actuales: {ex}")
     
     def on_contact_selected(self, contact):
         """Callback cuando se selecciona un contacto"""
@@ -213,16 +220,16 @@ class RelationshipManager:
             return
         
         try:
+            log_info(f"Intentando agregar relación: {self.contact_id} -> {related_contact_id} (tipo {relationship_type_id})")
             # Crear la relación
-            relationship_data = {
-                'contact_id': self.contact_id,
-                'related_contact_id': related_contact_id,
-                'relationship_type_id': int(relationship_type_id)
-            }
-            
-            new_relationship = self.relationship_service.create(relationship_data)
+            new_relationship = self.relationship_service.create(
+                contact_id=self.contact_id,
+                related_contact_id=related_contact_id,
+                relationship_type_id=int(relationship_type_id)
+            )
             
             if new_relationship:
+                log_info(f"Relación creada exitosamente: ID {new_relationship.id}")
                 # Limpiar selección
                 self.contact_search.search_field.value = ""
                 self.contact_search.dropdown.visible = False

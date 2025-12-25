@@ -1,7 +1,7 @@
 """
 Clase base para todos los modelos del CRM
 """
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer
 
 # Base para todos los modelos

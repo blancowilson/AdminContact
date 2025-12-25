@@ -2,10 +2,10 @@
 Punto de entrada principal para CRM Personal
 """
 import flet as ft
-from .config.settings import settings
-from .config.logging_config import log_info, log_error
-from .ui.app import main as ui_main
-from .database.migrations import initialize_database_and_migrate
+from src.config.settings import settings
+from src.config.logging_config import log_info, log_error
+from src.ui.app import main as ui_main
+from src.database.migrations import initialize_database_and_migrate
 
 def main(page: ft.Page):
     """Función principal de la aplicación"""

@@ -27,6 +27,7 @@ CRM Personal es una aplicación de gestión de contactos desarrollada en Python 
 ## Estructura del Proyecto
 
 ```
+<<<<<<< HEAD
 CRMPersonal/
 ├── run.py               # Script de inicio de la aplicación
 ├── src/main.py          # Punto de entrada principal de la aplicación
@@ -44,6 +45,28 @@ CRMPersonal/
 ├── contacts.csv         # Archivo de datos de ejemplo
 ├── contacts.db          # Base de datos SQLite
 └── README.md            # Documentación del proyecto
+=======
+AdminContact/
+├── .git/                 # Repositorio Git
+├── docs/                 # Documentación del proyecto
+├── scripts/              # Scripts de utilidad
+├── src/                  # Código fuente de la aplicación
+│   ├── config/           # Configuraciones
+│   ├── database/         # Módulos de base de datos (conexión, migraciones)
+│   ├── models/           # Definición de modelos de datos
+│   ├── services/         # Lógica de servicios (ej. manejadores de eventos, lógica de negocio)
+│   ├── ui/               # Componentes de la interfaz de usuario
+│   ├── utils/            # Funciones de utilidad
+│   ├── __init__.py       # Archivo de inicialización de paquete Python
+│   └── main.py           # Punto de entrada principal de la aplicación
+├── .gitignore            # Archivos y directorios ignorados por Git
+├── contacts.csv          # Archivo de datos de ejemplo
+├── pyproject.toml        # Configuración del proyecto y dependencias (PEP 621)
+├── README.md             # Documentación del proyecto
+├── requirements.txt      # Dependencias de Python
+├── run.py                # Script principal para iniciar la aplicación
+└── uv.lock               # Archivo de bloqueo de dependencias generado por uv (opcional)
+>>>>>>> 06653bc57d2718102fe2160557cb6bf90df12b44
 ```
 
 ## Descripción Detallada de los Scripts
@@ -197,7 +220,12 @@ La aplicación requiere las siguientes bibliotecas de Python:
    pipx install uv
    ```
 
-2. Instalar las dependencias con uv:
+2. Crear un entorno virtual:
+   ```bash
+   uv venv
+   ```
+
+3. Instalar las dependencias con uv:
    ```bash
    uv pip install -r requirements.txt
    ```
@@ -206,8 +234,12 @@ La aplicación requiere las siguientes bibliotecas de Python:
    ```bash
    uv pip install flet sqlalchemy pandas icecream
    ```
+   **Nota:** para que `flet` funcione correctamente, es posible que necesites instalar dependencias adicionales con:
+   ```bash
+   uv pip install "flet[all]"
+   ```
 
-3. Ejecutar la aplicación:
+4. Ejecutar la aplicación:
    ```bash
    python run.py
    ```
@@ -224,7 +256,7 @@ La aplicación requiere las siguientes bibliotecas de Python:
    pip install uv
    ```
 
-2. Instalar el proyecto:
+2. Instalar el proyecto (asegúrate de que `requires-python` en `pyproject.toml` esté configurado en `>=3.9`):
    ```bash
    uv sync
    # o para instalar en modo editable:
