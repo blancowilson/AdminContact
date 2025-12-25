@@ -30,8 +30,8 @@ class ReportScreen:
         self.btn_next_page = ft.IconButton(ft.Icons.ARROW_FORWARD_IOS_ROUNDED)
     
     def show(self):
-        """Muestra la pantalla de reportes"""
-        log_info("Mostrando pantalla de reportes")
+        """Devuelve el control de la pantalla de reportes"""
+        log_info("Obteniendo pantalla de reportes")
         
         # Botones
         btn_generate = ft.ElevatedButton("Generar Reporte", on_click=self.generate_report)
@@ -66,11 +66,7 @@ class ReportScreen:
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
         ])
-        
-        # Mostrar contenido
-        self.page.clean()
-        self.page.add(content)
-        self.page.update()
+        return content
     
     def generate_report(self, e):
         """Genera el reporte según los filtros"""

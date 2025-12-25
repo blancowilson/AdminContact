@@ -2,9 +2,9 @@
 Aplicación UI para CRM Personal
 """
 import flet as ft
-from ..config.logging_config import log_info, log_error
-from .screens.main_screen import MainScreen
-from .screens.contact_form_screen import ContactFormScreen
+from src.config.logging_config import log_info, log_error
+from src.ui.screens.main_screen import MainScreen
+from src.ui.screens.contact_form_screen import ContactFormScreen
 
 def main(page: ft.Page):
     """Función principal de la UI"""
@@ -64,7 +64,7 @@ def main(page: ft.Page):
 
     # Mostrar la pantalla principal por defecto
     main_screen = MainScreen(page)
-    main_screen.show()
+    page.add(main_screen.show())
 
 if __name__ == "__main__":
     # Para pruebas directas

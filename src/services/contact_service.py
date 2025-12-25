@@ -1,8 +1,8 @@
 """
 Servicio de gestión de contactos para CRM Personal
 """
-from ..database.repositories import ContactRepository, RelationshipRepository, TagRepository, HobbyRepository, EventRepository
-from ..config.logging_config import log_info, log_error, handle_error
+from src.database.repositories import ContactRepository, RelationshipRepository, TagRepository, HobbyRepository, EventRepository
+from src.config.logging_config import log_info, log_error, handle_error
 
 class ContactService:
     """Servicio para operaciones de contactos"""
@@ -77,8 +77,8 @@ class ContactService:
             raise
 
 from sqlalchemy.orm import Session
-from ..database.connection import engine
-from ..models.relationship import ContactRelationship, RelationshipType
+from src.database.connection import engine
+from src.models.relationship import ContactRelationship, RelationshipType
 
 class RelationshipService:
     """Servicio para operaciones de relaciones"""

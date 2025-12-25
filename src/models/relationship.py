@@ -3,7 +3,7 @@ Modelos de Relaciones para CRM Personal
 """
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from src.models.base import Base, BaseModel
 
 class RelationshipType(Base, BaseModel):
     __tablename__ = 'relationship_types'

@@ -2,8 +2,8 @@
 Pantalla de detalle de contacto para CRM Personal
 """
 import flet as ft
-from ...config.logging_config import log_info, log_error
-from ...services.contact_service import ContactService, RelationshipService, TagService, HobbyService, EventService
+from src.config.logging_config import log_info, log_error
+from src.services.contact_service import ContactService, RelationshipService, TagService, HobbyService, EventService
 
 class ContactDetailScreen:
     """Pantalla para mostrar detalles de un contacto"""
@@ -18,16 +18,14 @@ class ContactDetailScreen:
         self.event_service = EventService()
     
     def show(self):
-        """Muestra la pantalla de detalle del contacto"""
-        log_info(f"Mostrando detalle del contacto ID: {self.contact_id}")
+        """Devuelve el control de la pantalla de detalle del contacto"""
+        log_info(f"Obteniendo detalle del contacto ID: {self.contact_id}")
         
         try:
             # Obtener datos del contacto
             contact = self.contact_service.get_by_id(self.contact_id)
             if not contact:
-                self.page.add(ft.Text("Contacto no encontrado"))
-                self.page.update()
-                return
+                return ft.Text("Contacto no encontrado")
             
             # Obtener datos relacionados
             relationships = self.relationship_service.get_by_contact_id(self.contact_id)
@@ -104,17 +102,12 @@ class ContactDetailScreen:
                 # Botón de vuelta
                 ft.ElevatedButton("Volver", on_click=self.back_to_main)
             ])
-            
-            # Limpiar y mostrar contenido
-            self.page.clean()
-            self.page.add(content)
-            self.page.update()
+            return content
             
         except Exception as e:
-            error_msg = f"Error mostrando detalle del contacto: {str(e)}"
+            error_msg = f"Error obteniendo detalle del contacto: {str(e)}"
             log_error(error_msg)
-            self.page.add(ft.Text(error_msg))
-            self.page.update()
+            return ft.Text(error_msg)
     
     def back_to_main(self, e):
         """Regresa a la pantalla principal"""

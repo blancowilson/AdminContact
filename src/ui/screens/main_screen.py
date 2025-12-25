@@ -2,8 +2,8 @@
 Pantalla principal para CRM Personal
 """
 import flet as ft
-from ...config.logging_config import log_info, log_error
-from ...services.contact_service import ContactService
+from src.config.logging_config import log_info, log_error
+from src.services.contact_service import ContactService
 
 class MainScreen:
     """Pantalla principal del CRM"""
@@ -21,8 +21,8 @@ class MainScreen:
         self.chk_missing_email = ft.Checkbox(label="Sin Correo", value=False)
         
     def show(self):
-        """Muestra la pantalla principal"""
-        log_info("Mostrando pantalla principal")
+        """Devuelve el control principal de la pantalla"""
+        log_info("Obteniendo control de pantalla principal")
         
         # Botones principales
         btn_add_contact = ft.ElevatedButton("Agregar Contacto", on_click=self.open_add_contact)
@@ -39,29 +39,28 @@ class MainScreen:
         self.refresh_contact_list()
         
         # Contenido principal
-        self.page.add(
-            ft.Column(
-                controls=[
-                    ft.Text("Bienvenido al CRM Personal", size=20, weight=ft.FontWeight.BOLD),
-                    ft.Row([btn_add_contact, btn_show_report], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-                    ft.Divider(height=20),
-                    self.contact_list,
-                    ft.Row(
-                        [
-                            btn_previous_page,
-                            ft.Text("Página"),
-                            current_page_text,
-                            ft.Text("de"),
-                            total_pages_text,
-                            btn_next_page,
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.START,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER
-            )
+        layout = ft.Column(
+            controls=[
+                ft.Text("Bienvenido al CRM Personal", size=20, weight=ft.FontWeight.BOLD),
+                ft.Row([btn_add_contact, btn_show_report], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                ft.Divider(height=20),
+                self.contact_list,
+                ft.Row(
+                    [
+                        btn_previous_page,
+                        ft.Text("Página"),
+                        current_page_text,
+                        ft.Text("de"),
+                        total_pages_text,
+                        btn_next_page,
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.START,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
+        return layout
     
     def refresh_contact_list(self):
         """Actualiza la lista de contactos"""

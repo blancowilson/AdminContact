@@ -3,7 +3,7 @@ Modelos de Hobbies para CRM Personal
 """
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from src.models.base import Base, BaseModel
 
 class Hobby(Base, BaseModel):
     __tablename__ = 'hobbies'

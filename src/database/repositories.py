@@ -2,12 +2,12 @@
 Repositorios de acceso a datos para CRM Personal
 """
 from sqlalchemy.orm import Session
-from ..models.contact import Contact
-from ..models.relationship import ContactRelationship, RelationshipType
-from ..models.tag import ContactTag, TagType
-from ..models.hobby import ContactHobby, Hobby
-from ..models.event import ImportantEvent
-from ..database.connection import engine
+from src.models.contact import Contact
+from src.models.relationship import ContactRelationship, RelationshipType
+from src.models.tag import ContactTag, TagType
+from src.models.hobby import ContactHobby, Hobby
+from src.models.event import ImportantEvent
+from src.database.connection import engine
 
 class ContactRepository:
     """Repositorio para operaciones de contactos"""

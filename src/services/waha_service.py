@@ -2,8 +2,8 @@
 Servicio para conectarse a WAHA (WhatsApp HTTP API)
 """
 import requests
-from ..config.settings import settings
-from ..config.logging_config import log_info, log_error, handle_error
+from src.config.settings import settings
+from src.config.logging_config import log_info, log_error, handle_error
 
 class WahaService:
     """Servicio para operaciones de WhatsApp vía WAHA"""

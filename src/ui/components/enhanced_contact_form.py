@@ -1,8 +1,8 @@
 import flet as ft
 import time
-from ..config.logging_config import log_info, log_error
-from ..services.contact_service import ContactService
-from .contact_search_component import RelationshipManager
+from src.config.logging_config import log_info, log_error
+from src.services.contact_service import ContactService
+from src.ui.components.contact_search_component import RelationshipManager
 
 class EnhancedContactForm:
     """Formulario mejorado para contactos con gestión de relaciones, hobbies e informes"""

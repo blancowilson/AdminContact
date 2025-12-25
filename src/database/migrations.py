@@ -5,13 +5,13 @@ import os
 import pandas as pd
 from sqlalchemy.orm import Session
 from datetime import datetime
-from ..models.contact import Contact
-from ..models.relationship import RelationshipType, ContactRelationship
-from ..models.tag import TagType, ContactTag
-from ..models.hobby import Hobby, ContactHobby
-from ..models.event import ImportantEvent
-from ..config.logging_config import log_info, log_warning, log_error
-from ..database.connection import engine
+from src.models.contact import Contact
+from src.models.relationship import RelationshipType, ContactRelationship
+from src.models.tag import TagType, ContactTag
+from src.models.hobby import Hobby, ContactHobby
+from src.models.event import ImportantEvent
+from src.config.logging_config import log_info, log_warning, log_error
+from src.database.connection import engine
 
 def initialize_database_and_migrate():
     """Inicializa la base de datos y migra datos desde CSV si es necesario"""
@@ -19,7 +19,7 @@ def initialize_database_and_migrate():
     log_info("Iniciando proceso de inicialización y migración de base de datos")
     
     # Crear todas las tablas
-    from ..models.base import Base
+    from src.models.base import Base
     Base.metadata.create_all(engine)
     
     # Verificar si la tabla de contactos está vacía
@@ -183,13 +183,13 @@ def populate_default_data():
 
 def check_database_exists():
     """Verifica si la base de datos existe"""
-    from ..config.settings import settings
+    from src.config.settings import settings
     return os.path.exists(settings.DATABASE_PATH)
 
 def get_database_info():
     """Obtiene información sobre la base de datos"""
     from sqlalchemy import inspect
-    from ..models.base import Base
+    from src.models.base import Base
     
     inspector = inspect(engine)
     tables = inspector.get_table_names()

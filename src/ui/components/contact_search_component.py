@@ -2,7 +2,7 @@
 Componente de búsqueda de contactos para CRM Personal
 """
 import flet as ft
-from ...services.contact_service import ContactService
+from src.services.contact_service import ContactService, RelationshipService
 
 class ContactSearchField:
     """Componente para buscar y seleccionar contactos"""

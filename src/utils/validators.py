@@ -4,7 +4,7 @@ Validadores para CRM Personal
 import re
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional
-from .constants import REQUIRED_FIELDS
+from src.utils.constants import REQUIRED_FIELDS
 
 def validate_email(email: str) -> bool:
     """

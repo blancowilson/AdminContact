@@ -3,8 +3,8 @@ Modelo de Contacto para CRM Personal
 """
 from sqlalchemy import Column, String, Text, Boolean, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base
-from ..database.connection import engine
+from src.models.base import Base
+from src.database.connection import engine
 
 class Contact(Base):
     __tablename__ = 'contacts'
@@ -51,8 +51,8 @@ class Contact(Base):
         return f"<Contact(rowid={self.rowid}, name='{self.full_name}')>"
 
 # Importar después de Contact para evitar importación circular
-from .relationship import ContactRelationship
-from .tag import TagType
+from src.models.relationship import ContactRelationship
+from src.models.tag import TagType
 
 # Crear las tablas
 Base.metadata.create_all(engine)

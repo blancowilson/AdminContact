@@ -3,7 +3,7 @@ Modelos de Etiquetas para CRM Personal
 """
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from src.models.base import Base, BaseModel
 
 class TagType(Base, BaseModel):
     __tablename__ = 'tag_types'
