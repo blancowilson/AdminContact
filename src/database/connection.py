@@ -2,7 +2,7 @@
 Conexión a la base de datos para CRM Personal
 """
 from sqlalchemy import create_engine
-from ..config.settings import settings
+from src.config.settings import settings
 
 def get_engine():
     """Obtiene el motor de base de datos"""

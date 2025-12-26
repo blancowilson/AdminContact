@@ -3,7 +3,7 @@ Modelos de Hobbies para CRM Personal
 """
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from src.models.base import Base, BaseModel
 
 class Hobby(Base, BaseModel):
     __tablename__ = 'hobbies'
@@ -17,5 +17,5 @@ class ContactHobby(Base, BaseModel):
     hobby_id = Column(Integer, ForeignKey('hobbies.id'), nullable=False)
 
     # Relaciones SQLAlchemy
-    contact = relationship("Contact")
-    hobby = relationship("Hobby")
+    contact = relationship("Contact", overlaps="contacts,hobbies")
+    hobby = relationship("Hobby", overlaps="contacts,hobbies")

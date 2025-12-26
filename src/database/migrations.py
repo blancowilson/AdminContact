@@ -5,13 +5,13 @@ import os
 import pandas as pd
 from sqlalchemy.orm import Session
 from datetime import datetime
-from ..models.contact import Contact
-from ..models.relationship import RelationshipType, ContactRelationship
-from ..models.tag import TagType, ContactTag
-from ..models.hobby import Hobby, ContactHobby
-from ..models.event import ImportantEvent
-from ..config.logging_config import log_info, log_warning, log_error
-from ..database.connection import engine
+from src.models.contact import Contact
+from src.models.relationship import RelationshipType, ContactRelationship
+from src.models.tag import TagType, ContactTag
+from src.models.hobby import Hobby, ContactHobby
+from src.models.event import ImportantEvent
+from src.config.logging_config import log_info, log_warning, log_error
+from src.database.connection import engine
 
 def initialize_database_and_migrate():
     """Inicializa la base de datos y migra datos desde CSV si es necesario"""
@@ -19,8 +19,11 @@ def initialize_database_and_migrate():
     log_info("Iniciando proceso de inicialización y migración de base de datos")
     
     # Crear todas las tablas
-    from ..models.base import Base
+    from src.models.base import Base
     Base.metadata.create_all(engine)
+    
+    # Agregar columnas faltantes si la tabla ya existe
+    add_missing_columns()
     
     # Verificar si la tabla de contactos está vacía
     with Session(engine) as session:
@@ -54,6 +57,7 @@ def migrate_from_csv(session):
         
         # Seleccionar y renombrar columnas relevantes
         column_mapping = {
+            'Title': 'title',
             'First Name': 'first_name',
             'Last Name': 'last_name',
             'E-mail 1 - Value': 'email_1',
@@ -74,6 +78,11 @@ def migrate_from_csv(session):
         # Agregar columnas que no vienen del CSV
         df_filtered['relationship_general'] = ''  # Valor por defecto
         df_filtered['created_at'] = datetime.now()
+        df_filtered['status'] = 'Activo' # Nuevo campo
+        df_filtered['is_phone_verified'] = False # Nuevo campo
+        df_filtered['is_email_verified'] = False # Nuevo campo
+        df_filtered['is_name_verified'] = False # Nuevo campo
+        df_filtered['is_birthdate_verified'] = False # Nuevo campo
         
         # Procesar y agregar contactos
         added_count = 0
@@ -95,6 +104,12 @@ def migrate_from_csv(session):
                 if pd.isna(value):
                     contact_data[key] = ''
             
+<<<<<<< HEAD
+            # Filtrar solo los campos que existen en el modelo Contact
+            from sqlalchemy import inspect
+            mapper = inspect(Contact)
+            valid_columns = [column.key for column in mapper.attrs]
+=======
             # Eliminar claves que no pertenecen al modelo Contact
             valid_contact_fields = [
                 'first_name', 'last_name', 'email_1', 'email_2',
@@ -102,15 +117,20 @@ def migrate_from_csv(session):
                 'address',
                 'birth_date', 'notes', 'relationship_general'
             ]
+>>>>>>> 06653bc57d2718102fe2160557cb6bf90df12b44
             
             contact_params = {}
-            for field in valid_contact_fields:
+            for field in valid_columns:
                 if field in contact_data:
                     contact_params[field] = str(contact_data[field]) if contact_data[field] is not None else ''
             
-            new_contact = Contact(**contact_params)
-            session.add(new_contact)
-            added_count += 1
+            try:
+                new_contact = Contact(**contact_params)
+                session.add(new_contact)
+                added_count += 1
+            except TypeError as te:
+                log_error(f"Error creando instancia de Contact para {row.get('first_name', 'S/N')}: {te}")
+                continue
         
         session.commit()
         log_info(f"Migración completada: {added_count} contactos agregados desde CSV")
@@ -165,15 +185,73 @@ def populate_default_data():
         session.commit()
         log_info("Datos predeterminados agregados a la base de datos")
 
+def add_missing_columns():
+    """Agrega columnas faltantes a la tabla de contactos si no existen"""
+    import sqlite3
+    from src.config.settings import settings
+    
+    db_path = settings.DATABASE_PATH
+    if not os.path.exists(db_path):
+        return
+        
+    cols_to_add = [
+        ('title', 'TEXT'),
+        ('middle_name', 'TEXT'),
+        ('status', 'TEXT DEFAULT "Activo"'),
+        ('is_phone_verified', 'BOOLEAN DEFAULT 0'),
+        ('is_email_verified', 'BOOLEAN DEFAULT 0'),
+        ('is_name_verified', 'BOOLEAN DEFAULT 0'),
+        ('is_birthdate_verified', 'BOOLEAN DEFAULT 0'),
+        ('phone_3', 'TEXT'),
+        ('phone_4', 'TEXT'),
+        ('phone_5', 'TEXT'),
+        ('email_3', 'TEXT'),
+        ('city', 'TEXT'),
+        ('state', 'TEXT'),
+        ('zip_code', 'TEXT'),
+        ('country', 'TEXT'),
+        ('address_2', 'TEXT'),
+        ('city_2', 'TEXT'),
+        ('state_2', 'TEXT'),
+        ('zip_code_2', 'TEXT'),
+        ('country_2', 'TEXT'),
+        ('website', 'TEXT'),
+        ('last_contact_date', 'TEXT'),
+        ('last_contact_channel', 'TEXT'),
+        ('facebook', 'TEXT'),
+        ('instagram', 'TEXT'),
+        ('linkedin', 'TEXT'),
+        ('twitter', 'TEXT'),
+        ('tiktok', 'TEXT')
+    ]
+    
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Obtener columnas existentes
+        cursor.execute("PRAGMA table_info(contacts)")
+        existing_cols = [row[1] for row in cursor.fetchall()]
+        
+        for col_name, col_type in cols_to_add:
+            if col_name not in existing_cols:
+                log_info(f"Agregando columna {col_name} a la tabla contacts")
+                cursor.execute(f"ALTER TABLE contacts ADD COLUMN {col_name} {col_type}")
+        
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        log_error(f"Error agregando columnas faltantes: {e}")
+
 def check_database_exists():
     """Verifica si la base de datos existe"""
-    from ..config.settings import settings
+    from src.config.settings import settings
     return os.path.exists(settings.DATABASE_PATH)
 
 def get_database_info():
     """Obtiene información sobre la base de datos"""
     from sqlalchemy import inspect
-    from ..models.base import Base
+    from src.models.base import Base
     
     inspector = inspect(engine)
     tables = inspector.get_table_names()

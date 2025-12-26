@@ -3,6 +3,10 @@ Configuración del CRM Personal
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 class Settings:
     """Configuración de la aplicación"""
@@ -11,6 +15,11 @@ class Settings:
     DEBUG = os.getenv("CRM_DEBUG", "False").lower() == "true"
     LOG_LEVEL = os.getenv("CRM_LOG_LEVEL", "INFO")
     DATABASE_PATH = os.getenv("CRM_DATABASE_PATH", "contacts.db")
+    
+    # Configuración de WAHA
+    WAHA_BASE_URL = os.getenv("WAHA_BASE_URL", "http://localhost:3000")
+    WAHA_API_KEY = os.getenv("WAHA_API_KEY", "")
+    WAHA_SESSION = os.getenv("WAHA_SESSION", "default")
     
     # Configuración de la aplicación
     APP_NAME = "CRM Personal"

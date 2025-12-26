@@ -1,12 +1,2 @@
-"""
-Servicios para relaciones, hobbies, eventos y etiquetas
-"""
-from .contact_service import RelationshipService, TagService, HobbyService, EventService
-
-# Re-exportar para acceso más fácil
-__all__ = [
-    'RelationshipService',
-    'TagService', 
-    'HobbyService',
-    'EventService'
-]
+from src.services.contact_service import ContactService, RelationshipService, TagService, HobbyService, EventService
+from src.services.waha_service import WahaService

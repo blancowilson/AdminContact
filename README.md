@@ -2,21 +2,50 @@
 
 ## Descripción General
 
-CRM Personal es una aplicación de gestión de contactos desarrollada en Python que permite a los usuarios almacenar, gestionar y visualizar información de contactos de manera eficiente. La aplicación incluye funcionalidades para agregar, editar, eliminar y buscar contactos, así como generar informes personalizados con filtros.
+CRM Personal es una aplicación de gestión de contactos desarrollada en Python que permite a los usuarios almacenar, gestionar y visualizar información de contactos de manera eficiente. La aplicación incluye funcionalidades avanzadas para agregar, editar, eliminar y buscar contactos, gestionar relaciones entre contactos, hobbies e intereses, y eventos importantes, así como generar informes personalizados con filtros.
 
 ## Características Principales
 
 - Interfaz gráfica intuitiva desarrollada con Flet
 - Gestión completa de contactos (Agregar, Editar, Eliminar, Listar)
+- Sistema de búsqueda inteligente de contactos relacionados
+- Sistema de relaciones bidireccionales entre contactos
+- Sistema de hobbies e intereses por contacto
+- Sistema de eventos importantes (cumpleaños, aniversarios, etc.)
+- Sistema de etiquetas con categorías (amigos, trabajo, no contactar, etc.)
 - Sistema de paginación para grandes volúmenes de datos
 - Generación de informes con filtros (contactos sin teléfono, sin correo, etc.)
 - Validación de datos de entrada (emails, fechas)
 - Almacenamiento persistente en base de datos SQLite
 - Importación de datos desde archivos CSV
+- Vista detallada con relaciones, hobbies, eventos y etiquetas
+- Formulario de contacto con pestañas organizadas
+- Migración automática desde archivos CSV
+- Prevención de duplicados durante la migración
+- Compatibilidad con grandes volúmenes de datos (miles de contactos)
 
 ## Estructura del Proyecto
 
 ```
+<<<<<<< HEAD
+CRMPersonal/
+├── run.py               # Script de inicio de la aplicación
+├── src/main.py          # Punto de entrada principal de la aplicación
+├── ui.py                # Componentes de la interfaz de usuario
+├── event_handlers.py    # Manejadores de eventos para la lógica de la aplicación
+├── models.py            # Modelos de datos y lógica de negocio
+├── database.py          # Operaciones de base de datos
+├── contact.py           # Clase modelo para contactos
+├── validators.py        # Funciones de validación
+├── create_tables.py     # Script para crear las tablas de la base de datos
+├── utilitys.py          # Funciones de utilidad
+├── create_db.py         # Script para crear la base de datos (con error)
+├── main_view.py         # Vista alternativa de la aplicación
+├── temp.py              # Archivo temporal con funciones de ejemplo
+├── contacts.csv         # Archivo de datos de ejemplo
+├── contacts.db          # Base de datos SQLite
+└── README.md            # Documentación del proyecto
+=======
 AdminContact/
 ├── .git/                 # Repositorio Git
 ├── docs/                 # Documentación del proyecto
@@ -37,11 +66,12 @@ AdminContact/
 ├── requirements.txt      # Dependencias de Python
 ├── run.py                # Script principal para iniciar la aplicación
 └── uv.lock               # Archivo de bloqueo de dependencias generado por uv (opcional)
+>>>>>>> 06653bc57d2718102fe2160557cb6bf90df12b44
 ```
 
 ## Descripción Detallada de los Scripts
 
-### 1. `main.py` - Punto de Entrada Principal
+### 1. `run.py` - Script de Inicio
 
 Este es el archivo principal que inicia la aplicación Flet. Contiene:
 
@@ -164,6 +194,11 @@ La aplicación requiere las siguientes bibliotecas de Python:
 - `re`: Para expresiones regulares (parte de la biblioteca estándar)
 - `datetime`: Para manejo de fechas (parte de la biblioteca estándar)
 
+## Requisitos del Sistema
+
+- Python 3.9 o superior
+- pip (gestor de paquetes de Python)
+
 ## Instalación y Ejecución
 
 ### Con pip (método tradicional):
@@ -206,7 +241,7 @@ La aplicación requiere las siguientes bibliotecas de Python:
 
 4. Ejecutar la aplicación:
    ```bash
-   python main.py
+   python run.py
    ```
 
    O usar el script de inicio para controlar el modo:
@@ -249,7 +284,7 @@ python run.py --debug
 o establecer la variable de entorno:
 ```bash
 set CRM_DEBUG=true
-python main.py
+python run.py
 ```
 
 ## Sistema de Logs
@@ -260,14 +295,56 @@ El sistema ahora incluye un sistema de logs profesional que:
 - Incluye información de contexto en mensajes de error
 - Mantiene logs separados por día
 
+## Funcionalidades Avanzadas
+
+### Sistema de Búsqueda de Contactos Relacionados
+- Campo de búsqueda inteligente que filtra contactos mientras escribes
+- Búsqueda por nombre, teléfono o correo electrónico
+- Resultados en tiempo real con límite de 20 elementos
+- Integración directa en el formulario de relaciones
+
+### Sistema de Gestión de Relaciones
+- Relaciones bidireccionales entre contactos
+- Tipos de relaciones predefinidos (esposo/a, hijo/a, amigo/a, etc.)
+- Interfaz intuitiva para gestionar relaciones
+- Visualización de relaciones en vista detallada
+
+### Sistema de Hobbies e Intereses
+- Gestión de hobbies e intereses por contacto
+- Lista predefinida de hobbies comunes
+- Interfaz para agregar/quitar hobbies
+- Visualización en vista detallada
+
+### Sistema de Eventos Importantes
+- Registro de eventos importantes (cumpleaños, aniversarios, etc.)
+- Campo para título, fecha, descripción y si es recurrente
+- Interfaz para gestión de eventos
+- Visualización en vista detallada
+
+### Vista Detallada de Contactos
+- Información completa del contacto
+- Relaciones con otros contactos
+- Hobbies e intereses
+- Eventos importantes
+- Etiquetas asignadas
+- Navegación entre contactos relacionados
+
 ## Funcionalidades
 
 1. **Gestión de Contactos**: Agregar, editar y eliminar contactos con información completa
-2. **Búsqueda y Filtrado**: Buscar contactos por diferentes criterios
-3. **Informes Personalizados**: Generar informes con filtros (contactos sin teléfono, sin correo, etc.)
-4. **Paginación**: Visualización eficiente de grandes listas de contactos
-5. **Validación de Datos**: Verificación automática de formatos de email y fecha
-6. **Importación de Datos**: Carga inicial desde archivo CSV
+2. **Sistema de Relaciones**: Establecer relaciones bidireccionales entre contactos
+3. **Sistema de Búsqueda**: Buscar contactos relacionados mientras se crea/edita un contacto
+4. **Sistema de Hobbies**: Gestionar intereses y hobbies de los contactos
+5. **Sistema de Eventos**: Registrar fechas importantes como cumpleaños y aniversarios
+6. **Sistema de Etiquetas**: Categorizar contactos con etiquetas personalizadas
+7. **Vista Detallada**: Ver toda la información organizada en una única pantalla
+8. **Formulario con Pestañas**: Organización clara de información en pestañas (Información, Relaciones)
+9. **Migración de Datos**: Importar automáticamente desde CSV si la base de datos está vacía
+10. **Prevención de Duplicados**: Sistema que evita duplicar contactos durante la migración
+11. **Búsqueda y Filtrado**: Buscar contactos por diferentes criterios
+12. **Informes Personalizados**: Generar informes con filtros (contactos sin teléfono, sin correo, etc.)
+13. **Paginación**: Visualización eficiente de grandes listas de contactos
+14. **Validación de Datos**: Verificación automática de formatos de email y fecha
 
 ## Seguridad y Validación
 

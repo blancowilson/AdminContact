@@ -4,30 +4,41 @@ Script de inicio para CRM Personal con la nueva estructura
 import sys
 import os
 from pathlib import Path
-
-# Añadir el directorio src al path para importar módulos
-sys.path.insert(0, str(Path(__file__).parent / "src"))
+import importlib
 
 def start_app(debug=False):
     """Inicia la aplicación CRM Personal"""
     # Establecer variable de entorno para el modo
     os.environ["CRM_DEBUG"] = str(debug).lower()
-    
+
     print(f"Iniciando CRM Personal en modo {'DEBUG' if debug else 'PRODUCCIÓN'}")
-    
+
     try:
-        # Importar y ejecutar la aplicación
-        from src.main import main
-        import flet as ft
+        # Obtener la ruta de la raíz del proyecto (directorio donde está run.py)
+        root_path = Path(__file__).parent.absolute()
         
-        # Ejecutar la aplicación Flet
-        ft.app(target=main)
-        
-    except ImportError as e:
-        print(f"Error de importación: {e}")
-        print("Asegúrate de que todos los módulos necesarios estén instalados")
-        print("Instala las dependencias con: pip install -r requirements.txt")
-        
+        # Agregar la raíz al path de Python si no está
+        # Esto permite importar 'src' como un paquete
+        if str(root_path) not in sys.path:
+            sys.path.insert(0, str(root_path))
+
+        try:
+            # Importar el módulo main de src como paquete
+            # Como src/__init__.py existe, esto funcionará correctamente
+            main_module = importlib.import_module("src.main")
+            
+            # Verificar que la función main exista
+            if hasattr(main_module, 'main'):
+                import flet as ft
+                # Ejecutar la aplicación Flet con la función main
+                ft.app(target=main_module.main)
+            else:
+                print("Error: No se encontró la función 'main' en el módulo src.main")
+        except ImportError as e:
+            print(f"Error de importación: {e}")
+            import traceback
+            traceback.print_exc()
+
     except Exception as e:
         print(f"Error al iniciar la aplicación: {e}")
         import traceback

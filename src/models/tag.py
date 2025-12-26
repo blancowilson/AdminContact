@@ -3,7 +3,7 @@ Modelos de Etiquetas para CRM Personal
 """
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship
-from .base import Base, BaseModel
+from src.models.base import Base, BaseModel
 
 class TagType(Base, BaseModel):
     __tablename__ = 'tag_types'
@@ -19,5 +19,5 @@ class ContactTag(Base, BaseModel):
     tag_type_id = Column(Integer, ForeignKey('tag_types.id'), nullable=False)
 
     # Relaciones SQLAlchemy
-    contact = relationship("Contact")
-    tag_type = relationship("TagType")
+    contact = relationship("Contact", overlaps="contacts,tags")
+    tag_type = relationship("TagType", overlaps="contacts,tags")
